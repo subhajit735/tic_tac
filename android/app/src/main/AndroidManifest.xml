@@ -3,6 +3,7 @@
         android:label="tic_tac"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        android:usesclearTextTraffic="true"
         <activity
             android:name=".MainActivity"
             android:exported="true"
