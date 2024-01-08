@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tic_tac/provider/room_data_provider.dart';
 import 'package:tic_tac/resources/socket_client.dart';
 import 'package:tic_tac/screen/game_screen.dart';
+import 'package:tic_tac/utils/utils.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
@@ -18,6 +19,17 @@ class SocketMethods {
     }
   }
 
+  void joinRoom(String nickname, String roomId) {
+    if (nickname.isNotEmpty && roomId.isNotEmpty) {
+      _socketClient.emit(
+        'joinRoom',
+        {
+          'nickname': nickname,
+          'roomId': roomId,
+        },
+      );
+    }
+  }
 
 //listener
   void createRoomSuccesListener(BuildContext context) {
@@ -26,6 +38,21 @@ class SocketMethods {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
       Navigator.pushNamed(context, GameScreen.routeName);
+    });
+  }
+
+  void joinRoomSuccesListener(BuildContext context) {
+    _socketClient.on('joinRoomSuccess', (room) {
+      print(room);
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(room);
+      Navigator.pushNamed(context, GameScreen.routeName);
+    });
+  }
+
+  void errorOccuredListener(BuildContext context) {
+    _socketClient.on('errorOccured', (data) {
+      showSnackBar(context, data.toString());
     });
   }
 }

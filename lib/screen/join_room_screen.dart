@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac/resources/socket_method.dart';
 import 'package:tic_tac/responsive/responsive.dart';
 import 'package:tic_tac/widgets/custom_button.dart';
 import 'package:tic_tac/widgets/custom_text.dart';
@@ -15,6 +16,14 @@ class JoinRoomScreen extends StatefulWidget {
 class _JoinRoomScreenState extends State<JoinRoomScreen> {
   final TextEditingController _gameIDcontroller = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final SocketMethods _socketMethods = SocketMethods();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _socketMethods.joinRoomSuccesListener(context);
+  }
+
   void dispose() {
     super.dispose();
     _nameController.dispose();
@@ -46,18 +55,25 @@ class _JoinRoomScreenState extends State<JoinRoomScreen> {
                 height: size.height * 0.08,
               ),
               CustomTextField(
-                  text: "Enter your Nickname",
-                  textEditingController: _gameIDcontroller),
+                text: "Enter your Nickname",
+                textEditingController: _nameController,
+              ),
               SizedBox(
                 height: size.height * 0.04,
               ),
               CustomTextField(
-                  text: "Enter Game ID",
-                  textEditingController: _nameController),
+                text: "Enter Game ID",
+                textEditingController: _gameIDcontroller,
+              ),
               SizedBox(
                 height: size.height * 0.04,
               ),
-              CustomButton(onTap: () {}, text: "Join"),
+              CustomButton(
+                  onTap: () => _socketMethods.joinRoom(
+                        _nameController.text,
+                        _gameIDcontroller.text,
+                      ),
+                  text: "Join"),
             ],
           ),
         ),
