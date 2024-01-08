@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tic_tac/provider/room_data_provider.dart';
 import 'package:tic_tac/resources/socket_client.dart';
 import 'package:tic_tac/screen/game_screen.dart';
 import 'package:tic_tac/utils/utils.dart';
+import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketMethods {
   final _socketClient = SocketClient.instance.socket!;
+
+  Socket get socketClient => _socketClient;
   //emit
   void createRoom(String nickname) {
     if (nickname.isNotEmpty) {
@@ -41,18 +44,41 @@ class SocketMethods {
     });
   }
 
-  void joinRoomSuccesListener(BuildContext context) {
+   void joinRoomSuccessListener(BuildContext context) {
     _socketClient.on('joinRoomSuccess', (room) {
-      print(room);
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
       Navigator.pushNamed(context, GameScreen.routeName);
     });
   }
 
+
   void errorOccuredListener(BuildContext context) {
     _socketClient.on('errorOccured', (data) {
       showSnackBar(context, data.toString());
     });
   }
+
+  void updatePlayersStateListener(BuildContext context) {
+    _socketClient.on('updatePlayers', (playerData) {
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer1(
+        playerData[0],
+      );
+      Provider.of<RoomDataProvider>(context, listen: false).updatePlayer2(
+        playerData[1],
+      );
+    });
+  }
+
+
+   void updateRoomListener(BuildContext context) {
+    _socketClient.on('updateRoom', (data) {
+      Provider.of<RoomDataProvider>(context, listen: false)
+          .updateRoomData(data);
+    });
+  }
+
+  void updateplayerListener(BuildContext context) {}
+
+  // void updateplayerListener(BuildContext context) {}
 }

@@ -3,6 +3,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SocketClient {
   IO.Socket? socket;
   static SocketClient? _instance;
+
   SocketClient._internal() {
     socket = IO.io('http://192.168.139.250:4000', <String, dynamic>{
       'transports': ['websocket'],
