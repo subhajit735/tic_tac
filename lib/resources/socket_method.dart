@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac/game_element/check_winner.dart';
 import 'package:tic_tac/provider/room_data_provider.dart';
 import 'package:tic_tac/resources/socket_client.dart';
 import 'package:tic_tac/screen/game_screen.dart';
@@ -34,6 +35,15 @@ class SocketMethods {
     }
   }
 
+  void tapGrid(int index, String roomId, List<String> displayelement) {
+    if (displayelement[index] == '') {
+      _socketClient.emit('ontap', {
+        'index': index,
+        'roomId': roomId,
+      });
+    }
+  }
+
 //listener
   void createRoomSuccesListener(BuildContext context) {
     _socketClient.on('CreateRoomSuccess', (room) {
@@ -44,14 +54,13 @@ class SocketMethods {
     });
   }
 
-   void joinRoomSuccessListener(BuildContext context) {
+  void joinRoomSuccessListener(BuildContext context) {
     _socketClient.on('joinRoomSuccess', (room) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(room);
       Navigator.pushNamed(context, GameScreen.routeName);
     });
   }
-
 
   void errorOccuredListener(BuildContext context) {
     _socketClient.on('errorOccured', (data) {
@@ -70,15 +79,27 @@ class SocketMethods {
     });
   }
 
-
-   void updateRoomListener(BuildContext context) {
+  void updateRoomListener(BuildContext context) {
     _socketClient.on('updateRoom', (data) {
       Provider.of<RoomDataProvider>(context, listen: false)
           .updateRoomData(data);
     });
   }
 
-  void updateplayerListener(BuildContext context) {}
-
-  // void updateplayerListener(BuildContext context) {}
+  void tapGridListener(BuildContext context) {
+    _socketClient.on("tapped", (data) {
+      print("Sdfsdf");
+      RoomDataProvider roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      roomDataProvider.updateDisplayElements(
+        data['index'],
+        data['choice'],
+      );
+      roomDataProvider.updateRoomData(data['room']);
+      //checking winner
+      GameMethods().checkWinner(
+        context,_socketClient
+      );
+    });
+  }
 }

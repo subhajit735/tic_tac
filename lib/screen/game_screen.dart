@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tic_tac/game_element/scoreboard.dart';
+import 'package:tic_tac/game_element/tic_tac.dart';
 import 'package:tic_tac/provider/room_data_provider.dart';
 import 'package:tic_tac/resources/socket_method.dart';
 import 'package:tic_tac/widgets/waiting_lobby.dart';
@@ -25,17 +27,19 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
-    print(roomDataProvider.roomData);
     return Scaffold(
       body: roomDataProvider.roomData['isJoin']
-          ?  WaitingLobby()
+          ? WaitingLobby()
           : SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-              
+                  const ScoreBoard(),
+                  const TicTac(),
                   Text(
-                      '${roomDataProvider.roomData}\'s turn'),
+                    roomDataProvider.roomData['turn']['nickname']+'   turn',
+                    style: const TextStyle(fontSize: 30,),
+                  ),
                 ],
               ),
             ),
