@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac/game_element/check_winner.dart';
+import 'package:tic_tac/models/player.dart';
 import 'package:tic_tac/provider/room_data_provider.dart';
 import 'package:tic_tac/resources/socket_client.dart';
 import 'package:tic_tac/screen/game_screen.dart';
@@ -97,8 +98,28 @@ class SocketMethods {
       );
       roomDataProvider.updateRoomData(data['room']);
       //checking winner
-      GameMethods().checkWinner(
-        context,_socketClient
+      GameMethods().checkWinner(context, _socketClient);
+    });
+  }
+
+  void pointincreaseListener(BuildContext context) {
+    _socketClient.on('pointIncrease', (player) {
+      var roomdataprovider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      if (player['socketID'] == roomdataprovider.player1.socketID) {
+        roomdataprovider.updatePlayer1(player);
+      } else {
+        roomdataprovider.updatePlayer2(player);
+      }
+    });
+  }
+
+  void endgamelistener(BuildContext context) {
+    _socketClient.on("endGame", (player) {
+      gamedialogbox(context, '${player['nickname']} is the Winner!');
+      Navigator.popUntil(
+        context,
+        (route) => false,
       );
     });
   }

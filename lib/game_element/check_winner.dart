@@ -73,7 +73,7 @@ class GameMethods {
       winner = roomDataProvider.displayElements[2];
     } else if (roomDataProvider.filledBoxes == 9) {
       winner = '';
-      // showGameDialog(context, 'Draw');
+      gamedialogbox(context, 'Draw');
     }
 
     if (winner != '') {
@@ -93,15 +93,12 @@ class GameMethods {
     }
   }
 
-  void clearBoard(BuildContext context) {
+  void clearscreen(BuildContext context) {
     RoomDataProvider roomDataProvider =
         Provider.of<RoomDataProvider>(context, listen: false);
-
-    for (int i = 0; i < roomDataProvider.displayElements.length; i++) {
+    for (var i = 0; i < 9; i++) {
       roomDataProvider.updateDisplayElements(i, '');
     }
-    // roomDataProvider.setFilledBoxesTo0();
+    roomDataProvider.setfillbox();
   }
-
-  
 }

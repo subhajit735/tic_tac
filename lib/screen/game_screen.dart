@@ -22,6 +22,8 @@ class _GameScreenState extends State<GameScreen> {
     super.initState();
     _socketMethods.updateRoomListener(context);
     _socketMethods.updatePlayersStateListener(context);
+    _socketMethods.pointincreaseListener(context);
+    _socketMethods.endgamelistener(context);
   }
 
   @override
@@ -37,8 +39,10 @@ class _GameScreenState extends State<GameScreen> {
                   const ScoreBoard(),
                   const TicTac(),
                   Text(
-                    roomDataProvider.roomData['turn']['nickname']+'   turn',
-                    style: const TextStyle(fontSize: 30,),
+                    roomDataProvider.roomData['turn']['nickname'] + '   turn',
+                    style: const TextStyle(
+                      fontSize: 30,
+                    ),
                   ),
                 ],
               ),

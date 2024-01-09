@@ -20,7 +20,7 @@ class ScoreBoard extends StatelessWidget {
                 style: TextStyle(fontSize: 30),
               ),
               Text(
-                roomDataProvider.player1.points.toString(),
+                roomDataProvider.player1.points.toInt().toString(),
                 style: TextStyle(fontSize: 30),
               ),
             ],
@@ -32,7 +32,7 @@ class ScoreBoard extends StatelessWidget {
                 style: TextStyle(fontSize: 30),
               ),
               Text(
-                roomDataProvider.player2.points.toString(),
+                roomDataProvider.player2.points.toInt().toString(),
                 style: TextStyle(fontSize: 30),
               ),
             ],

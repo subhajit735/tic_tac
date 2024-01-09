@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac/game_element/check_winner.dart';
 
 void showSnackBar(BuildContext context, String cont) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -38,7 +39,10 @@ void gamedialogbox(BuildContext context, String text) {
         title: Text(text),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              GameMethods().clearscreen(context);
+              Navigator.pop(context);
+            },
             child: Text('PlayAgain'),
           ),
         ],
